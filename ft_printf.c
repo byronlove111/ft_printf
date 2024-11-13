@@ -123,6 +123,7 @@ int	print_hex(char c, va_list args)
 
 	count = 0;
 	ascii = ft_itoa(va_arg(args, int));
+	// SEGFAULT ICI A FIX
 	if (c == 'X')
 		str = ft_convert_base(ascii, "0123456789", "0123456789abcdef");
 	else
