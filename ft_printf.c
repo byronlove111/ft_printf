@@ -17,6 +17,16 @@
 
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
 
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
 static long	find_size(long nb)
 {
 	long	size;
@@ -105,6 +115,25 @@ void	ft_putunsigned_fd(unsigned int n, int fd)
 	ft_putchar_fd((n % 10) + 48, fd);
 }
 
+int	print_hex(char c, va_list args)
+{
+	char	*ascii;
+	char	*str;
+	int	count;
+
+	count = 0;
+	ascii = ft_itoa(va_arg(args, int));
+	if (c == 'X')
+		str = ft_convert_base(ascii, "0123456789", "0123456789abcdef");
+	else
+		str = ft_convert_base(ascii, "0123456789", "0123456789ABDCDEF");
+	count = ft_strlen(str);
+	ft_putstr_fd(str, 1);
+	free(ascii);
+	free(str);
+	return (count);	
+}
+
 int	if_statement(char c, va_list args)
 {
 	int	count;
@@ -116,13 +145,8 @@ int	if_statement(char c, va_list args)
 		ft_putstr_fd(va_arg(args, char *), 1);
 	else if (c == 'i' || c == 'd')
 		ft_putnbr_fd(va_arg(args, int), 1);
-	else if (c == 'x')
-	{
-		char *str2 = ft_convert_base(ft_itoa(va_arg(args, int)),
-		 "0123456789", "0123456789abcdef");
-		ft_putstr_fd(str2, 1);
-		free(str2);
-	}
+	else if (c == 'x' || c == 'X')
+		count = print_hex(c, args);
 	// else if (c == 'u')
 	// 	ft_putunsigned_fd(va_arg(args, unsigned int), 1);
 	else if (c == '%')
