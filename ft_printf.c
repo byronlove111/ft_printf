@@ -13,6 +13,57 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
+
+char	*ft_convert_base(char *nbr, char *base_from, char *base_to);
+
+static long	find_size(long nb)
+{
+	long	size;
+
+	size = 0;
+	if (nb == 0)
+		return (1);
+	if (nb < 0)
+	{
+		size++;
+		nb = -nb;
+	}
+	while (nb > 0)
+	{
+		nb /= 10;
+		size++;
+	}
+	return (size);
+}
+
+char	*ft_itoa(int n)
+{
+	long	nb;
+	long	i;
+	char	*str;
+
+	nb = n;
+	i = find_size(nb) - 1;
+	str = malloc(sizeof(char) * find_size(nb) + 1);
+	if (!str)
+		return (NULL);
+	str[i + 1] = '\0';
+	if (nb == 0)
+		str[0] = '0';
+	if (nb < 0)
+	{
+		str[0] = '-';
+		nb = -nb;
+	}
+	while (nb > 0)
+	{
+		str[i] = nb % 10 + 48;
+		nb /= 10;
+		i--;
+	}
+	return (str);
+}
 
 void	ft_putchar_fd(char c, int fd)
 {
@@ -47,6 +98,13 @@ void	ft_putnbr_fd(int n, int fd)
 	ft_putchar_fd((n % 10) + 48, fd);
 }
 
+void	ft_putunsigned_fd(unsigned int n, int fd)
+{
+	if (n > 9)
+		ft_putunsigned_fd(n / 10, fd);
+	ft_putchar_fd((n % 10) + 48, fd);
+}
+
 int	if_statement(char c, va_list args)
 {
 	int	count;
@@ -58,27 +116,38 @@ int	if_statement(char c, va_list args)
 		ft_putstr_fd(va_arg(args, char *), 1);
 	else if (c == 'i' || c == 'd')
 		ft_putnbr_fd(va_arg(args, int), 1);
+	else if (c == 'x')
+	{
+		char *str2 = ft_convert_base(ft_itoa(va_arg(args, int)),
+		 "0123456789", "0123456789abcdef");
+		ft_putstr_fd(str2, 1);
+		free(str2);
+	}
+	// else if (c == 'u')
+	// 	ft_putunsigned_fd(va_arg(args, unsigned int), 1);
 	else if (c == '%')
 		ft_putchar_fd('%', 1);
+	return (count);
 }
 
 int	ft_printf(const char *str, ...)
 {
 	va_list	args;
-	int		counter;
+	int		count;
 
+	count = 0;
 	va_start(args, str);
 	while (*str)
 	{
 		if (*str == '%')
 		{
 			str++;
-			if_statement(*str++, args);
+			count = if_statement(*str++, args);
 		}
 		else
 			write(1, str++, 1);
 	}
-	return (1);
+	return (count);
 }
 
 #include <stdio.h>
@@ -90,6 +159,8 @@ int	main(void)
 	char *str = " et luna";
 	int nb = INT_MIN;
 	int nb2 = INT_MAX;
-	ft_printf("%d%%%c%s%%",INT_MIN, c, str);
-	// printf("%%");
+	int n = -3243212;
+	// ft_printf("%d     %cccccc%%%s    ",INT_MIN, c, str);
+	printf("%x\n", n);
+	ft_printf("%x\n", n);
 }
