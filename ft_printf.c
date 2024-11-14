@@ -6,7 +6,7 @@
 /*   By: abbouras <abbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/14 17:50:04 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:00:37 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,4 @@ int	ft_printf(const char *str, ...)
 		}
 	}
 	return (count);
-}
-#include <stdio.h>
-int	main(void)
-{
-	int val = ft_printf("str : %s, int : %i, c : %c\n", "Malik", 22, 'z');
-	printf("%d\n", val);
-	int val2 = printf("str : %s, int : %i, c : %c\n", "Malik", 22, 'z');
-	printf("%d\n", val2);
 }
