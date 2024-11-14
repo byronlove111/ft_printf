@@ -6,7 +6,7 @@
 /*   By: abbouras <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/12 21:28:17 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:50:34 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,25 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	ft_putchar_fd(char c, int fd)
+void	ft_putchar_fd(char c, int fd, int *ct)
 {
 	write(fd, &c, 1);
+	(*ct)++;
 }
 
-void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(char *s, int fd, int *ct)
 {
 	if (!s)
 		return ;
 	while (*s)
 	{
 		ft_putchar_fd(*s, fd);
+		(*ct)++;
 		s++;
 	}
 }
 
-void	ft_putnbr_fd(int n, int fd)
+void	ft_putnbr_fd(int n, int fd, int *ct)
 {
 	if (n == -2147483648)
 	{
@@ -57,62 +59,56 @@ void	ft_putnbr_fd(int n, int fd)
 	}
 	if (n > 9)
 		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd((n % 10) + 48, fd);
+	ft_putchar_fd((n % 10) + 48, fd, ct);
 }
 
-void	ft_putnbr_base_ul(unsigned long nbr, char *base)
+void	ft_putnbr_base_ul(unsigned long nbr, char *base, int *ct)
 {
 	unsigned long	base_l;
 
 	base_l = ft_strlen(base);
 	if (nbr >= base_l)
-      	ft_putnbr_base_ul(nbr / base_l, base);
-	ft_putchar_fd(base[nbr % base_l], 1);
+      		ft_putnbr_base_ul(nbr / base_l, base);
+	ft_putchar_fd(base[nbr % base_l], 1, ct);
 }
 
-void	ft_putptr(void *ptr)
+void	ft_putptr(void *ptr, int *ct)
 {
 	unsigned long	addr;
 
 	addr = (unsigned long)ptr;
 	ft_putstr_fd("0x", 1);
 	if (addr == 0)
-      	ft_putchar_fd('0', 1);
+      		ft_putchar_fd('0', 1, ct);
 	else
-      	ft_putnbr_base_ul(addr, "0123456789abcdef");
+      		ft_putnbr_base_ul(addr, "0123456789abcdef", ct);
 }
 
-void	ft_putunsigned_fd(unsigned int n, int fd)
+void	ft_putunsigned_fd(unsigned int n, int fd, int *ct)
 {
 	if (n > 9)
 		ft_putunsigned_fd(n / 10, fd);
-	ft_putchar_fd((n % 10) + 48, fd);
+	ft_putchar_fd((n % 10) + 48, fd, ct);
 }
 
-int	ft_putnbr_base(int nbr, char *base)
+void	ft_putnbr_base(int nbr, char *base, int *ct)
 {
 	long	nb;
 	long	base_l;
-	int	counter;
 
-	counter = 0;
 	nb = nbr;
 	base_l = ft_strlen(base);
 	if (nb >= base_l)
 	{
 		ft_putnbr_base(nb / base_l, base);
 	}
-	ft_putchar_fd(base[nb % base_l], 1);
-	return (counter);
+	ft_putchar_fd(base[nb % base_l], 1, ct);
 }
 
-int	if_statement(char c, va_list args)
+void	if_statement(char c, va_list args, int *ct)
 {
-	int	count;
-
-	count = 0;
 	if (c == 'c')
-		ft_putchar_fd(va_arg(args, int), 1);
+		ft_putchar_fd(va_arg(args, int), 1, ct);
 	else if (c == 's')
 		ft_putstr_fd(va_arg(args, char *), 1);
 	else if (c == 'i' || c == 'd')
@@ -127,25 +123,29 @@ int	if_statement(char c, va_list args)
 		ft_putptr(va_arg(args, void *));
 	else if (c == '%')
 		ft_putchar_fd('%', 1);
-	return (count);
 }
 
 int	ft_printf(const char *str, ...)
 {
 	va_list	args;
 	int		count;
+	int		*ct;
 
 	count = 0;
+	ct = &count;
 	va_start(args, str);
 	while (*str)
 	{
 		if (*str == '%')
 		{
 			str++;
-			count = if_statement(*str++, args);
+			count = if_statement(*str++, args, ct);
 		}
 		else
+		{
 			write(1, str++, 1);
+			(*ct)++;
+		}
 	}
 	return (count);
 }
@@ -160,7 +160,7 @@ int	main(void)
 	int nb = INT_MIN;
 	int nb2 = INT_MAX;
 	unsigned int n = INT_MAX;
-	ft_printf("%p\n", &n);
-	printf("%p\n", &n);
+	ft_printf("ptr : %p int :%d str :%s char: %c x: %x\n", &n, 1, "Malik", 'z', 123);
+	printf("ptr : %p int :%d str :%s char: %c x: %x\n", &n, 1, "Malik", 'z', 123);
 	// ft_printf("%u\n", n);
 }
