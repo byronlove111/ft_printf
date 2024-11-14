@@ -6,7 +6,7 @@
 /*   By: abbouras <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/14 16:02:33 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:06:59 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,9 @@ void	if_statement(char c, va_list args, int *ct)
 
 int	ft_printf(const char *str, ...)
 {
-	va_list		args;
-	int		count;
+	va_list	args;
 	int		*ct;
+	int		count;
 
 	count = 0;
 	ct = &count;
@@ -146,19 +146,3 @@ int	ft_printf(const char *str, ...)
 	}
 	return (count);
 }
-
-/*#include <stdio.h>
-#include <limits.h>
-int	main(void)
-{
-	char c = 'z';
-	char *str = " et Kylian";
-	int nb = INT_MIN;
-	int nb2 = INT_MAX;
-	unsigned int n = INT_MAX;
-
-	int number = ft_printf("ptr : %p int :%d str :%s char: %c x: %x\n", &n, 1, "Malik", 'z', 123);
-	printf("IS IT GOOD ?%d\n", number);
-	int number2 = printf("ptr : %p int :%d str :%s char: %c x: %x\n", &n, 1, "Malik", 'z', 123);
-	printf("IS IT GOOD ?%d\n", number2);
-}*/
