@@ -27,54 +27,6 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static long	find_size(long nb)
-{
-	long	size;
-
-	size = 0;
-	if (nb == 0)
-		return (1);
-	if (nb < 0)
-	{
-		size++;
-		nb = -nb;
-	}
-	while (nb > 0)
-	{
-		nb /= 10;
-		size++;
-	}
-	return (size);
-}
-
-char	*ft_itoa(int n)
-{
-	long	nb;
-	long	i;
-	char	*str;
-
-	nb = n;
-	i = find_size(nb) - 1;
-	str = malloc(sizeof(char) * find_size(nb) + 1);
-	if (!str)
-		return (NULL);
-	str[i + 1] = '\0';
-	if (nb == 0)
-		str[0] = '0';
-	if (nb < 0)
-	{
-		str[0] = '-';
-		nb = -nb;
-	}
-	while (nb > 0)
-	{
-		str[i] = nb % 10 + 48;
-		nb /= 10;
-		i--;
-	}
-	return (str);
-}
-
 void	ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
@@ -108,6 +60,28 @@ void	ft_putnbr_fd(int n, int fd)
 	ft_putchar_fd((n % 10) + 48, fd);
 }
 
+void	ft_putnbr_base_ul(unsigned long nbr, char *base)
+{
+	unsigned long	base_l;
+
+	base_l = ft_strlen(base);
+	if (nbr >= base_l)
+      	ft_putnbr_base_ul(nbr / base_l, base);
+	ft_putchar_fd(base[nbr % base_l], 1);
+}
+
+void	ft_putptr(void *ptr)
+{
+	unsigned long	addr;
+
+	addr = (unsigned long)ptr;
+	ft_putstr_fd("0x", 1);
+	if (addr == 0)
+      	ft_putchar_fd('0', 1);
+	else
+      	ft_putnbr_base_ul(addr, "0123456789abcdef");
+}
+
 void	ft_putunsigned_fd(unsigned int n, int fd)
 {
 	if (n > 9)
@@ -115,24 +89,21 @@ void	ft_putunsigned_fd(unsigned int n, int fd)
 	ft_putchar_fd((n % 10) + 48, fd);
 }
 
-int	print_hex(char c, va_list args)
+int	ft_putnbr_base(int nbr, char *base)
 {
-	char	*ascii;
-	char	*str;
-	int	count;
+	long	nb;
+	long	base_l;
+	int	counter;
 
-	count = 0;
-	ascii = ft_itoa(va_arg(args, int));
-	// SEGFAULT ICI A FIX
-	if (c == 'X')
-		str = ft_convert_base(ascii, "0123456789", "0123456789abcdef");
-	else
-		str = ft_convert_base(ascii, "0123456789", "0123456789ABDCDEF");
-	count = ft_strlen(str);
-	ft_putstr_fd(str, 1);
-	free(ascii);
-	free(str);
-	return (count);	
+	counter = 0;
+	nb = nbr;
+	base_l = ft_strlen(base);
+	if (nb >= base_l)
+	{
+		ft_putnbr_base(nb / base_l, base);
+	}
+	ft_putchar_fd(base[nb % base_l], 1);
+	return (counter);
 }
 
 int	if_statement(char c, va_list args)
@@ -146,10 +117,14 @@ int	if_statement(char c, va_list args)
 		ft_putstr_fd(va_arg(args, char *), 1);
 	else if (c == 'i' || c == 'd')
 		ft_putnbr_fd(va_arg(args, int), 1);
-	else if (c == 'x' || c == 'X')
-		count = print_hex(c, args);
-	// else if (c == 'u')
-	// 	ft_putunsigned_fd(va_arg(args, unsigned int), 1);
+	else if (c == 'x')
+		count = ft_putnbr_base(va_arg(args, int), "0123456789abcdef");
+	else if (c == 'X')
+		count = ft_putnbr_base(va_arg(args, int), "0123456789ABCDEF");
+	else if (c == 'u')
+		ft_putunsigned_fd(va_arg(args, unsigned int), 1);
+	else if (c == 'p')
+		ft_putptr(va_arg(args, void *));
 	else if (c == '%')
 		ft_putchar_fd('%', 1);
 	return (count);
@@ -181,11 +156,11 @@ int	ft_printf(const char *str, ...)
 int	main(void)
 {
 	char c = 'z';
-	char *str = " et luna";
+	char *str = " et Kylian";
 	int nb = INT_MIN;
 	int nb2 = INT_MAX;
-	int n = -3243212;
-	// ft_printf("%d     %cccccc%%%s    ",INT_MIN, c, str);
-	printf("%x\n", n);
-	ft_printf("%x\n", n);
+	unsigned int n = INT_MAX;
+	ft_printf("%p\n", &n);
+	printf("%p\n", &n);
+	// ft_printf("%u\n", n);
 }
