@@ -6,7 +6,7 @@
 /*   By: abbouras <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/14 16:06:59 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:19:59 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ void	ft_putchar_fd(char c, int fd, int *ct)
 void	ft_putstr_fd(char *s, int fd, int *ct)
 {
 	if (!s)
+	{
+		*ct += write(1, "(null)", 6);
 		return ;
+	}
 	while (*s)
 	{
 		ft_putchar_fd(*s, fd, ct);
@@ -69,7 +72,7 @@ void	ft_putnbr_base_ul(unsigned long nbr, char *base, int *ct)
 	ft_putchar_fd(base[nbr % base_l], 1, ct);
 }
 
-void	ft_putptr(void *ptr, int *ct)
+void	ft_putptr(unsigned long *ptr, int *ct)
 {
 	unsigned long	addr;
 
@@ -111,13 +114,13 @@ void	if_statement(char c, va_list args, int *ct)
 	else if (c == 'i' || c == 'd')
 		ft_putnbr_fd(va_arg(args, int), 1, ct);
 	else if (c == 'x')
-		ft_putnbr_base(va_arg(args, int), "0123456789abcdef", ct);
+		ft_putnbr_base(va_arg(args, unsigned int), "0123456789abcdef", ct);
 	else if (c == 'X')
-		ft_putnbr_base(va_arg(args, int), "0123456789ABCDEF", ct);
+		ft_putnbr_base(va_arg(args, unsigned int), "0123456789ABCDEF", ct);
 	else if (c == 'u')
 		ft_putunsigned_fd(va_arg(args, unsigned int), 1, ct);
 	else if (c == 'p')
-		ft_putptr(va_arg(args, void *), ct);
+		ft_putptr(va_arg(args, unsigned long*), ct);
 	else if (c == '%')
 		ft_putchar_fd('%', 1, ct);
 }
@@ -145,4 +148,10 @@ int	ft_printf(const char *str, ...)
 		}
 	}
 	return (count);
+}
+
+int	main(void)
+{
+	ft_printf("%s", NULL);
+	printf("%s", NULL);
 }
