@@ -6,7 +6,7 @@
 /*   By: abbouras <abbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/15 16:42:37 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/15 18:46:12 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ int	ft_printf(const char *str, ...)
 			(*ct)++;
 		}
 	}
+	va_end(args);
 	return (count);
 }
