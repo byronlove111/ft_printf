@@ -6,7 +6,7 @@
 /*   By: abbouras <abbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 17:36:48 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/14 17:48:42 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:57:27 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 
 size_t	ft_strlen(const char *s);
+int		ft_printf(const char *str, ...);
 void	ft_putchar_fd(char c, int fd, int *ct);
 void	ft_putstr_fd(char *s, int fd, int *ct);
 void	ft_putnbr_fd(int n, int fd, int *ct);

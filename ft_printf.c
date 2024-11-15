@@ -6,7 +6,7 @@
 /*   By: abbouras <abbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/14 18:00:37 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:42:37 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ void	ft_putptr(unsigned long *ptr, int *ct)
 	unsigned long	addr;
 
 	addr = (unsigned long)ptr;
-	ft_putstr_fd("0x", 1, ct);
 	if (addr == 0)
-		ft_putchar_fd('0', 1, ct);
+		*ct += write(1, "(nil)", 5);
 	else
+	{
+		ft_putstr_fd("0x", 1, ct);
 		ft_putnbr_base_ul(addr, "0123456789abcdef", ct);
+	}
 }
 
 void	ft_putunsigned_fd(unsigned int n, int fd, int *ct)
@@ -31,18 +33,16 @@ void	ft_putunsigned_fd(unsigned int n, int fd, int *ct)
 	ft_putchar_fd((n % 10) + 48, fd, ct);
 }
 
-void	ft_putnbr_base(int nbr, char *base, int *ct)
+void	ft_putnbr_base(unsigned int nbr, char *base, int *ct)
 {
-	long	nb;
-	long	base_l;
+	unsigned int	base_l;
 
-	nb = nbr;
 	base_l = ft_strlen(base);
-	if (nb >= base_l)
+	if (nbr >= base_l)
 	{
-		ft_putnbr_base(nb / base_l, base, ct);
+		ft_putnbr_base(nbr / base_l, base, ct);
 	}
-	ft_putchar_fd(base[nb % base_l], 1, ct);
+	ft_putchar_fd(base[nbr % base_l], 1, ct);
 }
 
 static void	if_statement(char c, va_list args, int *ct)
