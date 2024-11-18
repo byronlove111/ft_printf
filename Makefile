@@ -1,21 +1,20 @@
 NAME = libftprintf.a
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+AR = ar crs
 
 SRCS = ft_printf.c \
        utils.c
 
 OBJS = $(SRCS:.c=.o)
 
-HEADERS = ft_printf.h
+$(NAME): $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
-
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
 clean:
 	rm -f $(OBJS)
