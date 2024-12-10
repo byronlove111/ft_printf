@@ -6,7 +6,7 @@
 /*   By: abbouras <abbouras@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 20:20:39 by abbouras          #+#    #+#             */
-/*   Updated: 2024/11/18 17:23:06 by abbouras         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:22:30 by abbouras         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	ft_printf(const char *str, ...)
 	int		*ct;
 	int		count;
 
+	if (!str)
+		return (-1);
 	count = 0;
 	ct = &count;
 	va_start(args, str);
